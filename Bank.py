@@ -1,3 +1,17 @@
+class In:
+    def nextLine(inputText):
+        return input(inputText)
+
+    def nextInt(inputText):
+        return int(input(inputText))
+
+    def nextDouble(inputText):
+        return float(input(inputText))
+
+    def nextChar():
+        return chr(input("Start banking(d/w/s/x/help): "))
+
+
 class Account:
     def __init__(self, type, balance):
         self.type = type
@@ -20,35 +34,48 @@ class Bank:
     def __init__(self):
         self.customers = []
         self.admin = Manager('John')
+        self.choice = In.nextChar
+        self.balance = float(1000)
+
+    def deposit(self):
+        deposit = In.nextDouble("Amount to deposit $")
+        self.balance += deposit
+        print(f'>> Amount deposited ${deposit}')
+
+    def withdraw(self):
+        withdraw = float(input("Amount to withdraw $"))
+        if withdraw <= self.balance:
+            self.balance -= withdraw
+            print(f'>> Amount withdrawn ${withdraw}')
+        else:
+            print('>> Insufficient funds')
+
+    def viewBalance(self):
+        print(f'>> Current balance ${self.balance}')
+
+    def help(self):
+        print("d: Make a deposit")
+        print("w: Withdraw fund")
+        print("s: Show current balance")
+        print("x: Exit system")
 
     def run(self):
 
-        choice = input("Start Banking(d/w/s/x): ")
-
-        balance = float(1000)
-
-        while choice != 'x':
-            match choice:
+        while self.choice != 'x':
+            match self.choice:
                 case 'd':
-                    deposit = float(input("Amount to deposit $"))
-                    balance += deposit
-                    print(f'>> Amount deposited ${deposit}')
-
+                    self.deposit()
                 case 'w':
-                    withdraw = float(input("Amount to withdraw $"))
-                    if withdraw <= balance:
-                        balance -= withdraw
-                        print(f'>> Amount withdrawn ${withdraw}')
-                    else:
-                        print('>> Insufficient funds')
-
+                    self.withdraw()
                 case 's':
-                    print(f">> Starting Balance ${balance}")
-
-                case _: print(">> Unknown choice!")
+                    self.viewBalance()
+                case 'help':
+                    self.help()
+                case _:
+                    print(">> Unknown choice!")
 
             print()
-            choice = input("Start Banking(d/w/s/x): ")
+            self.choice = input("Start Banking(d/w/s/x/help): ")
 
 
 b1 = Bank()
